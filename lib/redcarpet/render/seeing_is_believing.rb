@@ -13,7 +13,11 @@ module Redcarpet
         enriched_code = code.split("\n").
           zip(evaluated_code).
           map do |code_line, eval_lines|
-            code_line + " # => " + eval_lines.join("\n")
+            if eval_lines.any?
+              code_line + " # => " + eval_lines.join("\n")
+            else
+              code_line
+            end
           end
 
         super(enriched_code.join("\n"), "ruby")
