@@ -18,7 +18,13 @@ Gem::Specification.new do |spec|
   spec.executables   = spec.files.grep(%r{^exe/}) { |f| File.basename(f) }
   spec.require_paths = ["lib"]
 
+  spec.add_dependency "redcarpet"
+  spec.add_dependency "seeing_is_believing"
+
   spec.add_development_dependency "bundler", "~> 1.16"
+  spec.add_development_dependency "nokogiri", "~> 1.8"
+  spec.add_development_dependency "pry"
   spec.add_development_dependency "rake", "~> 10.0"
+  spec.add_development_dependency "rouge"
   spec.add_development_dependency "rspec", "~> 3.7"
 end

@@ -1,4 +1,5 @@
 require "bundler/setup"
+require "pry"
 require "redcarpet/render/seeing_is_believing"
 
 RSpec.configure do |config|
