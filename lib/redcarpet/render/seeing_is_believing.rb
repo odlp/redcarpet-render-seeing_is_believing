@@ -1,26 +1,16 @@
+require "redcarpet/render/seeing_is_believing/enricher"
 require "redcarpet/render/seeing_is_believing/version"
-require "seeing_is_believing"
 
 module Redcarpet
   module Render
     module SeeingIsBelieving
       def block_code(code, language)
-        if language != "ruby+"
-          return super(code, language)
+        if language == "ruby+"
+          enriched_code = Enricher.new.process(code)
+          super(enriched_code, "ruby")
+        else
+          super(code, language)
         end
-
-        evaluated_code = ::SeeingIsBelieving.call(code).result
-        enriched_code = code.split("\n").
-          zip(evaluated_code).
-          map do |code_line, eval_lines|
-            if eval_lines.any?
-              code_line + " # => " + eval_lines.join("\n")
-            else
-              code_line
-            end
-          end
-
-        super(enriched_code.join("\n"), "ruby")
       end
     end
   end
