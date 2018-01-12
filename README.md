@@ -58,7 +58,15 @@ Redcarpet::Markdown.new(MyCustomHtmlRenderer, fenced_code_blocks: true).
 [redcarpet]: https://github.com/vmg/redcarpet
 [sib]: https://github.com/JoshCheek/seeing_is_believing
 
+## Options
+
+You can pass additional options after the `ruby+` language hint:
+
+- `ruby+e`: Hints exceptions are expected, and should be displayed. Exceptions
+  are hidden by default.
+
 ## TODO
 
-- Ignore exceptions / failed evaluations by default
 - Allow comments to be scoped to specific lines
+- Wrap comments to the following line when the overall length is greater than
+  80 chars
