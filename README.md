@@ -1,5 +1,7 @@
 # Redcarpet::Render::SeeingIsBelieving
 
+[![Build Status](https://travis-ci.org/odlp/redcarpet-render-seeing_is_believing.svg?branch=master)](https://travis-ci.org/odlp/redcarpet-render-seeing_is_believing)
+
 Powerup the Ruby examples in your markdown. Combines the excellent
 [Redcarpet][redcarpet] (a markdown parser) with [Seeing Is Believing][sib],
 which shows the evaluated result from each line of code.
