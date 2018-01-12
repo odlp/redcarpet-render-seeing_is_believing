@@ -38,6 +38,30 @@ RSpec.describe Redcarpet::Render::SeeingIsBelieving do
         expect(highlighted_code[0]).to eq 'foo = "bar" # => "bar"'
         expect(highlighted_code[1]).to eq 'foo.upcase # => "BAR"'
       end
+
+      describe "options" do
+        it "passes the options to the enricher" do
+          markdown = <<~MD
+            ```ruby+e
+              :foo
+            ```
+          MD
+
+          options_class = Redcarpet::Render::SeeingIsBelieving::Options
+          enricher_class = Redcarpet::Render::SeeingIsBelieving::Enricher
+
+          enricher = instance_double(enricher_class, process: "")
+          options = instance_double(options_class)
+
+          expect(options_class).to receive(:parse).
+            with("ruby+e").and_return(options)
+
+          expect(enricher_class).to receive(:new).
+            with(options).and_return(enricher)
+
+          render_html_for_markdown(CustomHtmlRenderer, markdown)
+        end
+      end
     end
   end
 
