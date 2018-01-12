@@ -38,19 +38,6 @@ RSpec.describe Redcarpet::Render::SeeingIsBelieving do
         expect(highlighted_code[0]).to eq 'foo = "bar" # => "bar"'
         expect(highlighted_code[1]).to eq 'foo.upcase # => "BAR"'
       end
-
-      it "doesn't add a comment on blank lines" do
-        html = render_html_for_markdown CustomHtmlRenderer, <<~MD
-          ```ruby+
-
-            "bar".upcase
-          ```
-        MD
-        highlighted_code = extract_highlighted_ruby(html)
-
-        expect(highlighted_code[0]).to be_empty
-        expect(highlighted_code[1]).to eq '"bar".upcase # => "BAR"'
-      end
     end
   end
 
