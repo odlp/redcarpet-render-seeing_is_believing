@@ -3,7 +3,7 @@ require "redcarpet"
 require "rouge"
 require "rouge/plugins/redcarpet"
 require "sinatra"
-require_relative "../lib/redcarpet/render/seeing_is_believing"
+require "redcarpet/render/seeing_is_believing"
 
 class SiBHtmlRenderer < Redcarpet::Render::HTML
   prepend Redcarpet::Render::SeeingIsBelieving

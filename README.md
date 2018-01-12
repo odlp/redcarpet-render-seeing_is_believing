@@ -20,8 +20,16 @@ Then you'll see the result of each line of code:
 
 ## Usage
 
+Add the following line to your `Gemfile` and `bundle install`:
+
 ```ruby
-require "redcarpet-render-seeing_is_believing"
+gem "redcarpet-render-seeing_is_believing"
+```
+
+Then `prepend` the module in your renderer:
+
+```ruby
+require "redcarpet/render/seeing_is_believing"
 require "redcarpet"
 
 class MyCustomHtmlRenderer < Redcarpet::Render::HTML
@@ -41,7 +49,7 @@ or combine with [Rouge][rouge] syntax highlighter:
 [rouge]: https://github.com/jneen/rouge
 
 ```ruby
-require "redcarpet-render-seeing_is_believing"
+require "redcarpet/render/seeing_is_believing"
 require "redcarpet"
 require "rouge"
 require "rouge/plugins/redcarpet"
