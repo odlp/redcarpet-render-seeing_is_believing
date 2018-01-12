@@ -10,7 +10,7 @@ end
 
 RSpec.describe Redcarpet::Render::SeeingIsBelieving do
   describe "#block_code" do
-    context "code without opt-in flag" do
+    context "Ruby code without opt-in flag" do
       it "is not enriched with code evaluation comments" do
         html = render_html_for_markdown CustomHtmlRenderer, <<~MD
           ```ruby
@@ -18,10 +18,23 @@ RSpec.describe Redcarpet::Render::SeeingIsBelieving do
             foo.upcase
           ```
         MD
-        highlighted_code = extract_highlighted_ruby(html)
+        highlighted_code = extract_highlighted_code(html)
 
         expect(highlighted_code[0]).to eq 'foo = "bar"'
         expect(highlighted_code[1]).to eq 'foo.upcase'
+      end
+    end
+
+    context "code with no language specified" do
+      it "is not enriched with code evaluation comments" do
+        html = render_html_for_markdown CustomHtmlRenderer, <<~MD
+          ```
+            var a = true;
+          ```
+        MD
+        highlighted_code = extract_highlighted_code(html)
+
+        expect(highlighted_code[0]).to eq "var a = true;"
       end
     end
 
@@ -33,7 +46,7 @@ RSpec.describe Redcarpet::Render::SeeingIsBelieving do
             foo.upcase
           ```
         MD
-        highlighted_code = extract_highlighted_ruby(html)
+        highlighted_code = extract_highlighted_code(html)
 
         expect(highlighted_code[0]).to eq 'foo = "bar" # => "bar"'
         expect(highlighted_code[1]).to eq 'foo.upcase # => "BAR"'
@@ -73,7 +86,7 @@ RSpec.describe Redcarpet::Render::SeeingIsBelieving do
     Nokogiri::HTML(raw_html)
   end
 
-  def extract_highlighted_ruby(html)
-    html.css(".highlight .ruby").first.text.split("\n").map(&:strip)
+  def extract_highlighted_code(html)
+    html.css(".highlight").first.text.split("\n").map(&:strip)
   end
 end

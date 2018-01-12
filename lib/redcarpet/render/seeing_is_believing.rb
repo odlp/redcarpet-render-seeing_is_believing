@@ -6,7 +6,7 @@ module Redcarpet
   module Render
     module SeeingIsBelieving
       def block_code(code, language)
-        if language.start_with? "ruby+"
+        if language&.start_with? "ruby+"
           options = Options.parse(language)
           enriched_code = Enricher.new(options).process(code)
           super(enriched_code, "ruby")
