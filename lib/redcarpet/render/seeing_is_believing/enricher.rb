@@ -10,8 +10,10 @@ module Redcarpet
         end
 
         def process(code)
-          result = evaluate_code(code)
-          combine_code_with_result(code.split("\n"), result).join("\n")
+          code.split("\n").
+            zip(evaluate_code(code)).
+            map(&combine_code_with_result).
+            join("\n")
         end
 
         private
@@ -19,19 +21,33 @@ module Redcarpet
         attr_reader :options
 
         def evaluate_code(code)
-          ::SeeingIsBelieving.call(code).result
+          eval_result = ::SeeingIsBelieving.call(code).result
+          combine_eval_lines_and_exceptions(eval_result)
         end
 
-        def combine_code_with_result(code_lines, result)
-          code_lines.map.with_index(1) do |code_line, line_no|
-            eval_lines = result[line_no]
-            exception = result.exceptions.
-              detect { |ex| ex.line_number == line_no }
+        def combine_eval_lines_and_exceptions(result)
+          (1..result.num_lines).map do |line_number|
+            eval_lines = result[line_number]
+            exception = exception_for_line(result.exceptions, line_number)
 
             if eval_lines.any?
-              code_line + " # => " + eval_lines.join("\n")
-            elsif options.show_exceptions && exception
-              code_line + " # => #{exception.class_name}: #{exception.message}"
+              eval_lines.join(" ")
+            elsif exception
+              "#{exception.class_name}: #{exception.message}"
+            end
+          end
+        end
+
+        def exception_for_line(exceptions, line_number)
+          if options.show_exceptions
+            exceptions.detect { |ex| ex.line_number == line_number }
+          end
+        end
+
+        def combine_code_with_result
+          proc do |code_line, eval_line|
+            if eval_line
+              "#{code_line} # => #{eval_line}"
             else
               code_line
             end
