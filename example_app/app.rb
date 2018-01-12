@@ -6,11 +6,11 @@ require "sinatra"
 require_relative "../lib/redcarpet/render/seeing_is_believing"
 
 class SiBHtmlRenderer < Redcarpet::Render::HTML
+  prepend Redcarpet::Render::SeeingIsBelieving
+
   def block_code(code, language)
     "<pre><code>#{code}</code></pre>"
   end
-
-  prepend Redcarpet::Render::SeeingIsBelieving
 end
 
 class SiBRougeHtmlRenderer < Redcarpet::Render::HTML
@@ -19,21 +19,23 @@ class SiBRougeHtmlRenderer < Redcarpet::Render::HTML
 end
 
 get "/" do
-  markdown_example = <<~MARKDOWN
+  markdown = <<~MARKDOWN
     ```ruby+
       animals = ["Aardvark", "Butterfly", "Camel"]
       animals.map(&:upcase)
     ```
   MARKDOWN
 
-  default_html = Redcarpet::Markdown.new(Redcarpet::Render::HTML, fenced_code_blocks: true).
-    render(markdown_example)
+  options = { fenced_code_blocks: true }
 
-  sib_html = Redcarpet::Markdown.new(SiBHtmlRenderer, fenced_code_blocks: true).
-    render(markdown_example)
+  default_html =
+    Redcarpet::Markdown.new(Redcarpet::Render::HTML, options).render(markdown)
 
-  sib_rouge_html = Redcarpet::Markdown.new(SiBRougeHtmlRenderer, fenced_code_blocks: true).
-    render(markdown_example)
+  sib_html =
+    Redcarpet::Markdown.new(SiBHtmlRenderer, options).render(markdown)
+
+  sib_rouge_html =
+    Redcarpet::Markdown.new(SiBRougeHtmlRenderer, options).render(markdown)
 
   css = Rouge::Theme.find("github").render(scope: ".highlight")
 
@@ -58,13 +60,13 @@ get "/" do
           </style>
       </head>
       <body>
-        <b>Default Redcarpet HTML renderer</b>
+        <b>Redcarpet HTML renderer</b>
         #{default_html}
 
-        <b>Seeing is Believing + custom Redcarpet HTML renderer</b>
+        <b>Seeing is Believing + Redcarpet HTML renderer</b>
         #{sib_html}
 
-        <b>Rouge + Seeing is Believing + custom Redcarpet HTML renderer</b>
+        <b>Rouge + Seeing is Believing + Redcarpet HTML renderer</b>
         #{sib_rouge_html}
       </body>
     </html>

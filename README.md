@@ -2,7 +2,7 @@
 
 Powerup the Ruby examples in your markdown. Combines the excellent
 [Redcarpet][redcarpet] (a markdown parser) with [Seeing Is Believing][sib],
-which evaluates each line of code.
+which shows the evaluated result from each line of code.
 
 If your markdown includes a fenced code block with `ruby+` specified as the
 language:
@@ -23,11 +23,11 @@ require "redcarpet-render-seeing_is_believing"
 require "redcarpet"
 
 class MyCustomHtmlRenderer < Redcarpet::Render::HTML
+  prepend Redcarpet::Render::SeeingIsBelieving
+
   def block_code(code, language)
     "<pre><code>#{code}</code></pre>"
   end
-
-  prepend Redcarpet::Render::SeeingIsBelieving
 end
 
 Redcarpet::Markdown.new(MyCustomHtmlRenderer, fenced_code_blocks: true).
