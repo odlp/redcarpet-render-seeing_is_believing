@@ -6,7 +6,6 @@ Gem::Specification.new do |spec|
   spec.name          = "redcarpet-render-seeing_is_believing"
   spec.version       = Redcarpet::Render::SeeingIsBelieving::VERSION
   spec.authors       = ["Oli Peate"]
-  spec.email         = ["oliverp@gmail.com"]
   spec.license       = "MIT"
 
   spec.summary       = "Evaluates Ruby code in your markdown, for awesome examples."
